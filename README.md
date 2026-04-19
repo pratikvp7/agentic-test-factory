@@ -16,3 +16,51 @@ Test application used: [ParaBank](https://parabank.parasoft.com/parabank/index.h
 4. Groq generates structured test cases
 5. Output is saved to `output/`
 
+---
+
+## Setup
+
+**1. Clone the repo**
+```bash
+git clone https://github.com/pratikvp7/agentic-test-factory.git
+cd agentic-test-factory
+```
+
+**2. Create virtual environment**
+```bash
+python -m venv venv
+venv\Scripts\activate        # Windows
+source venv/bin/activate     # Mac/Linux
+```
+
+**3. Install dependencies**
+```bash
+pip install groq mcp python-dotenv
+```
+
+**4. Add your API key**
+
+Create a `.env` file in the root:
+
+GROQ_API_KEY=your_key_here
+
+Get a free key at [console.groq.com](https://console.groq.com)
+
+---
+
+## Run it
+
+```bash
+python agent/test_generator_agent.py login.md
+```
+
+To generate tests for a different feature:
+```bash
+python agent/test_generator_agent.py register.md
+```
+
+Generated test cases appear in `output/` and print to screen.
+
+
+
+
