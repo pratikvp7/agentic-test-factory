@@ -6,9 +6,8 @@ from dotenv import load_dotenv
 from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import stdio_client
 
-# ──────────────────────────────────────────────
-# SETUP
-# ──────────────────────────────────────────────
+
+# Setup
 logging.basicConfig(stream=sys.stderr, level=logging.INFO)
 logger = logging.getLogger(__name__)
 
@@ -23,9 +22,7 @@ load_dotenv(BASE_DIR / ".env")
 OUTPUT_DIR.mkdir(exist_ok=True)
 
 
-# ──────────────────────────────────────────────
-# STEP 1 — READ INPUT FILES
-# ──────────────────────────────────────────────
+# Step 1: Ready input files
 def read_files(feature_file: str) -> tuple[str, str]:
     feature_path = FEATURES_DIR / feature_file
 
@@ -43,9 +40,7 @@ def read_files(feature_file: str) -> tuple[str, str]:
     return feature_text, instructions_text
 
 
-# ──────────────────────────────────────────────
-# STEP 2 — BUILD THE PROMPT
-# ──────────────────────────────────────────────
+# Step 2: Build a prompt
 def build_prompt(feature_text: str, instructions_text: str) -> str:
     prompt = f"""
 You are a senior QA engineer working on a banking web application called ParaBank.
@@ -71,9 +66,7 @@ Follow these rules strictly:
     return prompt.strip()
 
 
-# ──────────────────────────────────────────────
-# STEP 3 — CALL MCP TOOL
-# ──────────────────────────────────────────────
+# Step 3: Call MCP tool
 async def call_mcp_tool(prompt: str) -> str:
     server_params = StdioServerParameters(
         command=PYTHON,
@@ -95,9 +88,7 @@ async def call_mcp_tool(prompt: str) -> str:
             return result.content[0].text
 
 
-# ──────────────────────────────────────────────
-# STEP 4 — SAVE OUTPUT
-# ──────────────────────────────────────────────
+# Step 4: Save output
 def save_output(feature_file: str, test_cases: str) -> Path:
     feature_name = Path(feature_file).stem          # login.md → login
     output_file  = OUTPUT_DIR / f"{feature_name}_tests.txt"
@@ -106,9 +97,7 @@ def save_output(feature_file: str, test_cases: str) -> Path:
     return output_file
 
 
-# ──────────────────────────────────────────────
-# MAIN — ORCHESTRATES ALL STEPS
-# ──────────────────────────────────────────────
+# Orchestrates all steps
 async def run(feature_file: str):
     # Step 1 — Read files
     feature_text, instructions_text = read_files(feature_file)
@@ -131,9 +120,6 @@ async def run(feature_file: str):
     print(f"\nSaved to: {output_file}")
 
 
-# ──────────────────────────────────────────────
-# ENTRY POINT
-# ──────────────────────────────────────────────
 if __name__ == "__main__":
     # Usage:
     #   python agent/test_generator_agent.py login.md
