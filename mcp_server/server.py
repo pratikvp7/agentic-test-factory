@@ -31,7 +31,7 @@ def generate_test_cases(feature_text: str) -> str:
     logger.info(f"Generating test cases for: {feature_text}")
 
     response = client.chat.completions.create(
-        model="llama-3.3-70b-versatile",  # ✅ Groq model
+        model="llama-3.3-70b-versatile",
         messages=[
             {"role": "system", "content": "You are a senior QA engineer."},
             {"role": "user", "content": feature_text}
