@@ -15,7 +15,7 @@ env_path = BASE_DIR / ".env"
 logger.info(f"ENV PATH: {env_path}")
 load_dotenv(dotenv_path=env_path)
 
-api_key = os.getenv("GROQ_API_KEY")  # ✅ Changed from OPENAI_API_KEY
+api_key = os.getenv("GROQ_API_KEY")  # Changed from OPENAI_API_KEY
 logger.info(f"KEY FOUND: {bool(api_key)}")
 
 if not api_key:
@@ -23,7 +23,7 @@ if not api_key:
 
 mcp = FastMCP("test-factory")
 
-client = Groq(api_key=api_key)  # ✅ Groq client, no base_url needed
+client = Groq(api_key=api_key)  # Groq client, no base_url needed
 
 @mcp.tool()
 def generate_test_cases(feature_text: str) -> str:
