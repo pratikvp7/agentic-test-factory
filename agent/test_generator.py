@@ -1,22 +1,21 @@
+import logging
 import sys
 import asyncio
-import logging
 from pathlib import Path
 from dotenv import load_dotenv
 from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import stdio_client
 
 
-# Setup
 logging.basicConfig(stream=sys.stderr, level=logging.INFO)
-logger = logging.getLogger(__name__)
+log = logging.getLogger(__name__)
 
-BASE_DIR        = Path(__file__).resolve().parent.parent
-FEATURES_DIR    = BASE_DIR / "features"
-INSTRUCTIONS    = BASE_DIR / "instructions" / "test_writing_guide.md"
-OUTPUT_DIR      = BASE_DIR / "output"
-MCP_SERVER      = BASE_DIR / "mcp_server" / "server.py"
-PYTHON          = sys.executable
+BASE_DIR = Path(__file__).resolve().parent.parent
+FEATURES_DIR = BASE_DIR / "features"
+INSTRUCTIONS = BASE_DIR / "instructions" / "test_writing_guide.md"
+OUTPUT_DIR = BASE_DIR / "output"
+MCP_SERVER = BASE_DIR / "mcp_server" / "server.py"
+PYTHON = sys.executable
 
 load_dotenv(BASE_DIR / ".env")
 OUTPUT_DIR.mkdir(exist_ok=True)
@@ -31,11 +30,11 @@ def read_files(feature_file: str) -> tuple[str, str]:
     if not INSTRUCTIONS.exists():
         raise FileNotFoundError(f"Instructions file not found: {INSTRUCTIONS}")
 
-    feature_text      = feature_path.read_text()
+    feature_text = feature_path.read_text()
     instructions_text = INSTRUCTIONS.read_text()
 
-    logger.info(f"Feature file loaded:      {feature_path}")
-    logger.info(f"Instructions file loaded: {INSTRUCTIONS}")
+    log.info(f"Feature file loaded: {feature_path}")
+    log.info(f"Instructions file loaded: {INSTRUCTIONS}")
 
     return feature_text, instructions_text
 
@@ -73,8 +72,8 @@ async def call_mcp_tool(prompt: str) -> str:
         args=[str(MCP_SERVER)]
     )
 
-    logger.info("Starting MCP server...")
-    logger.info("Calling generate_test_cases tool...")
+    log.info("Starting MCP server...")
+    log.info("Calling generate_test_cases tool...")
 
     async with stdio_client(server_params) as (read, write):
         async with ClientSession(read, write) as session:
@@ -93,7 +92,7 @@ def save_output(feature_file: str, test_cases: str) -> Path:
     feature_name = Path(feature_file).stem          # login.md → login
     output_file  = OUTPUT_DIR / f"{feature_name}_tests.txt"
     output_file.write_text(test_cases)
-    logger.info(f"Test cases saved to: {output_file}")
+    log.info(f"Test cases saved to: {output_file}")
     return output_file
 
 
@@ -112,12 +111,12 @@ async def run(feature_file: str):
     output_file = save_output(feature_file, test_cases)
 
     # Print to screen
-    print("\n" + "=" * 60)
-    print(f"  GENERATED TEST CASES — {feature_file}")
-    print("=" * 60)
-    print(test_cases)
-    print("=" * 60)
-    print(f"\nSaved to: {output_file}")
+    log.debug("\n" + "=" * 60)
+    log.debug(f"  GENERATED TEST CASES — {feature_file}")
+    log.debug("=" * 60)
+    log.debug(test_cases)
+    log.debug("=" * 60)
+    log.debug(f"\nSaved to: {output_file}")
 
 
 if __name__ == "__main__":
