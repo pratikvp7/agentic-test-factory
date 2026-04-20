@@ -90,7 +90,7 @@ async def call_mcp_tool(prompt: str) -> str:
 # Step 4: Save output
 def save_output(feature_file: str, test_cases: str) -> Path:
     feature_name = Path(feature_file).stem          # login.md → login
-    output_file  = OUTPUT_DIR / f"{feature_name}_tests.txt"
+    output_file = OUTPUT_DIR / f"{feature_name}_tests.txt"
     output_file.write_text(test_cases)
     log.info(f"Test cases saved to: {output_file}")
     return output_file
