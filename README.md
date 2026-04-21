@@ -46,6 +46,7 @@ GROQ_API_KEY=your_key_here
 
 Get a free key at [console.groq.com](https://console.groq.com)
 
+
 ---
 
 ## Run it
