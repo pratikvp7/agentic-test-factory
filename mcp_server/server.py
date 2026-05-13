@@ -14,7 +14,7 @@ env_path = BASE_DIR / ".env"
 log.info(f"ENV PATH: {env_path}")
 load_dotenv(dotenv_path=env_path)
 
-api_key = os.getenv("GROQ_API_KEY")  # Changed from OPENAI_API_KEY
+api_key = os.getenv("GROQ_API_KEY")
 log.info(f"KEY FOUND: {bool(api_key)}")
 
 if not api_key:
