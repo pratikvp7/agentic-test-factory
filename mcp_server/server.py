@@ -24,6 +24,7 @@ mcp = FastMCP("test-factory")
 
 client = Groq(api_key=api_key)  # Groq client
 
+
 @mcp.tool()
 def generate_test_cases(feature_text: str) -> str:
     """Generate QA test cases for a given feature description."""
